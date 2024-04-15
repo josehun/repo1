@@ -97,3 +97,5 @@ szalloda.foglalas(102, date(2024, 9, 25))
 
 # Felhasználói interakció elindítása
 felhasznalo_interakcio(szalloda)
+
+#v1.0.10
