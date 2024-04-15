@@ -19,7 +19,13 @@ class EgyagyasSzoba(Szoba):
 # KétágyasSzoba osztály
 class KetagyasSzoba(Szoba):
     def get_ar(self):
-        return self.ar * 1.5  # Kétágyas szobák ára 50%-kal több
+        return self.ar
+    
+# Foglalás osztály
+class Foglalas:
+    def __init__(self, szobaszam, datum):
+        self.szobaszam = szobaszam
+        self.datum = datum
 
 # Szálloda osztály
 class Szalloda:
@@ -34,15 +40,20 @@ class Szalloda:
     def foglalas(self, szobaszam, datum):
         if datum <= date.today():
             return "Érvénytelen dátum"
+        if szobaszam not in [szoba.szobaszam for szoba in self.szobak]:
+            return f"Nincs ilyen szobaszám, kérjük az alábbi szobákból válasszon: {self.elerheto_szobak()}"
         for foglalas in self.foglalasok:
-            if foglalas['szobaszam'] == szobaszam and foglalas['datum'] == datum:
+            if foglalas.szobaszam == szobaszam and foglalas.datum == datum:
                 return "A szoba ezen a napon már foglalt"
-        self.foglalasok.append({'szobaszam': szobaszam, 'datum': datum})
+        self.foglalasok.append(Foglalas(szobaszam, datum))
         return f"Foglalás rögzítve. Ár: {next(szoba for szoba in self.szobak if szoba.szobaszam == szobaszam).get_ar()}"
+
+    def elerheto_szobak(self):
+        return ', '.join(f"{szoba.szobaszam} - {'egyágyas' if isinstance(szoba, EgyagyasSzoba) else 'kétágyas'} {szoba.get_ar()}" for szoba in self.szobak)
 
     def foglalas_lemondas(self, szobaszam, datum):
         for foglalas in self.foglalasok:
-            if foglalas['szobaszam'] == szobaszam and foglalas['datum'] == datum:
+            if foglalas.szobaszam == szobaszam and foglalas.datum == datum:
                 self.foglalasok.remove(foglalas)
                 return "Foglalás lemondva"
         return "Nem található ilyen foglalás"
@@ -50,7 +61,7 @@ class Szalloda:
     def foglalasok_listazasa(self):
         if not self.foglalasok:
             return "Nincsenek foglalások"
-        return '\n'.join(f"Szobaszám: {foglalas['szobaszam']}, Dátum: {foglalas['datum']}" for foglalas in self.foglalasok)
+        return '\n'.join(f"Szobaszám: {foglalas.szobaszam}, Dátum: {foglalas.datum}" for foglalas in self.foglalasok)
 
 # Felhasználói interakció
 def felhasznalo_interakcio(szalloda):
@@ -92,10 +103,8 @@ szalloda.szoba_hozzaadas(EgyagyasSzoba(10000, 103))
 szalloda.foglalas(101, date(2024, 5, 20))
 szalloda.foglalas(102, date(2024, 6, 15))
 szalloda.foglalas(103, date(2024, 7, 10))
-szalloda.foglalas(101, date(2024, 8, 5))
+szalloda.foglalas(101, date(2024, 8, 16))
 szalloda.foglalas(102, date(2024, 9, 25))
 
 # Felhasználói interakció elindítása
 felhasznalo_interakcio(szalloda)
-
-#v1.0.10
