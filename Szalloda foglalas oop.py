@@ -108,3 +108,5 @@ szalloda.foglalas(102, date(2024, 9, 25))
 
 # Felhasználói interakció elindítása
 felhasznalo_interakcio(szalloda)
+
+#AY29K6
