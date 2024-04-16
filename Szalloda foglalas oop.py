@@ -102,11 +102,9 @@ szalloda.szoba_hozzaadas(EgyagyasSzoba(10000, 102))
 # Tesztadatok betöltése
 szalloda.foglalas(101, date(2024, 5, 20))
 szalloda.foglalas(201, date(2024, 6, 15))
-szalloda.foglalas(103, date(2024, 7, 10))
-szalloda.foglalas(102, date(2024, 8, 16))
+szalloda.foglalas(102, date(2024, 7, 10))
+szalloda.foglalas(101, date(2024, 8, 16))
 szalloda.foglalas(201, date(2024, 9, 25))
 
 # Felhasználói interakció elindítása
 felhasznalo_interakcio(szalloda)
-
-#AY29K6
