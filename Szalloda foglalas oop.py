@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import date
 
+
 # Absztrakt Szoba osztály
 class Szoba(ABC):
     def __init__(self, ar, szobaszam):
@@ -11,21 +12,25 @@ class Szoba(ABC):
     def get_ar(self):
         pass
 
+
 # EgyágyasSzoba osztály
 class EgyagyasSzoba(Szoba):
     def get_ar(self):
         return self.ar
 
+
 # KétágyasSzoba osztály
 class KetagyasSzoba(Szoba):
     def get_ar(self):
         return self.ar
-    
+
+
 # Foglalás osztály
 class Foglalas:
     def __init__(self, szobaszam, datum):
         self.szobaszam = szobaszam
         self.datum = datum
+
 
 # Szálloda osztály
 class Szalloda:
@@ -49,7 +54,9 @@ class Szalloda:
         return f"Foglalás rögzítve. Ár: {next(szoba for szoba in self.szobak if szoba.szobaszam == szobaszam).get_ar()}"
 
     def elerheto_szobak(self):
-        return ', '.join(f"{szoba.szobaszam} - {'egyágyas' if isinstance(szoba, EgyagyasSzoba) else 'kétágyas'} {szoba.get_ar()}" for szoba in self.szobak)
+        return ', '.join(
+            f"{szoba.szobaszam} - {'egyágyas' if isinstance(szoba, EgyagyasSzoba) else 'kétágyas'} {szoba.get_ar()}" for
+            szoba in self.szobak)
 
     def foglalas_lemondas(self, szobaszam, datum):
         for foglalas in self.foglalasok:
@@ -63,9 +70,10 @@ class Szalloda:
             return "Nincsenek foglalások"
         return '\n'.join(f"Szobaszám: {foglalas.szobaszam}, Dátum: {foglalas.datum}" for foglalas in self.foglalasok)
 
+
 # Felhasználói interakció
-def felhasznalo_interakcio(szalloda):
-    print(f"Üdvözöljük a {szalloda.nev} szállodában!")
+def felhasznalo_interakcio(szalloda_):
+    print(f"Üdvözöljük a {szalloda_.nev} szállodában!")
     while True:
         print("\nVálasszon az alábbi opciók közül:")
         print("1. Szoba foglalása")
@@ -73,28 +81,29 @@ def felhasznalo_interakcio(szalloda):
         print("3. Foglalások listázása")
         print("4. Kilépés")
         valasztas = input("Kérjük, adja meg a választott opció számát: ")
-        
+
         if valasztas == '1':
             szobaszam = int(input("Adja meg a szobaszámot: "))
             ev, honap, nap = map(int, input("Adja meg a foglalás dátumát (év hónap nap): ").split())
             datum = date(ev, honap, nap)
-            print(szalloda.foglalas(szobaszam, datum))
+            print(szalloda_.foglalas(szobaszam, datum))
         elif valasztas == '2':
             szobaszam = int(input("Adja meg a szobaszámot: "))
             ev, honap, nap = map(int, input("Adja meg a lemondás dátumát (év hónap nap): ").split())
             datum = date(ev, honap, nap)
-            print(szalloda.foglalas_lemondas(szobaszam, datum))
+            print(szalloda_.foglalas_lemondas(szobaszam, datum))
         elif valasztas == '3':
             print("Foglalások listája:")
-            print(szalloda.foglalasok_listazasa())
+            print(szalloda_.foglalasok_listazasa())
         elif valasztas == '4':
             print("Köszönjük, hogy minket választott!")
             break
         else:
             print("Érvénytelen választás. Kérjük, próbálja újra.")
 
+
 # Példányosítás és tesztelés
-szalloda = Szalloda("Példa Szálloda")
+szalloda = Szalloda("AY29K6 Szálloda")
 szalloda.szoba_hozzaadas(EgyagyasSzoba(10000, 101))
 szalloda.szoba_hozzaadas(KetagyasSzoba(15000, 201))
 szalloda.szoba_hozzaadas(EgyagyasSzoba(10000, 102))
