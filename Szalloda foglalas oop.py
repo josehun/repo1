@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from datetime import date
+from datetime import date, datetime
 
 
 # Absztrakt Szoba osztály
@@ -68,7 +68,9 @@ class Szalloda:
     def foglalasok_listazasa(self):
         if not self.foglalasok:
             return "Nincsenek foglalások"
-        return '\n'.join(f"Szobaszám: {foglalas.szobaszam}, Dátum: {foglalas.datum}" for foglalas in self.foglalasok)
+        return '\n'.join(
+            f"Szobaszám: {foglalas.szobaszam}, Dátum: {foglalas.datum.strftime('%Y.%m.%d')}" for foglalas in
+            self.foglalasok)
 
 
 # Felhasználói interakció
@@ -84,13 +86,13 @@ def felhasznalo_interakcio(szalloda_):
 
         if valasztas == '1':
             szobaszam = int(input("Adja meg a szobaszámot: "))
-            ev, honap, nap = map(int, input("Adja meg a foglalás dátumát (év hónap nap): ").split())
-            datum = date(ev, honap, nap)
+            datum_str = input("Adja meg a foglalás dátumát (év.hónap.nap): ")
+            datum = datetime.strptime(datum_str, '%Y.%m.%d').date()
             print(szalloda_.foglalas(szobaszam, datum))
         elif valasztas == '2':
             szobaszam = int(input("Adja meg a szobaszámot: "))
-            ev, honap, nap = map(int, input("Adja meg a lemondás dátumát (év hónap nap): ").split())
-            datum = date(ev, honap, nap)
+            datum_str = input("Adja meg a lemondás dátumát (év.hónap.nap): ")
+            datum = datetime.strptime(datum_str, '%Y.%m.%d').date()
             print(szalloda_.foglalas_lemondas(szobaszam, datum))
         elif valasztas == '3':
             print("Foglalások listája:")
